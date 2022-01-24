@@ -35,4 +35,12 @@ public class BankAccountService {
         }
     }
 
+    public BankAccount update(BankAccount bankAccount) {
+        try {
+            return bankAccountDao.update(bankAccount);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

@@ -55,4 +55,13 @@ public class AccountResource {
         return Response.ok(ba, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateBankAccount(BankAccount bankAccount) {
+        BankAccount ba = bankAccountService.update(bankAccount);
+        if (ba == null) {
+            return Response.serverError().build();
+        }
+        return Response.ok(bankAccount, MediaType.APPLICATION_JSON_TYPE).build();
+    }
 }

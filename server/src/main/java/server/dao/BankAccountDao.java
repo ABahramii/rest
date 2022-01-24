@@ -36,4 +36,8 @@ public class BankAccountDao {
         return bankAccount;
     }
 
+    public BankAccount update(BankAccount bankAccount) {
+        em.merge(bankAccount);
+        return bankAccount;
+    }
 }

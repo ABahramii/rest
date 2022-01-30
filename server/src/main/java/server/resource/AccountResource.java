@@ -8,8 +8,9 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
-@Path("/account")
+@Path("/accounts")
 @RequestScoped
 public class AccountResource {
 
@@ -22,13 +23,12 @@ public class AccountResource {
     public Response findAccountById(@PathParam("id") Long id) {
         BankAccount bankAccount = bankAccountService.findById(id);
         if (bankAccount == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return Response.ok(bankAccount, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     @GET
-    @Path("/BankAccounts")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAllBankAccounts() {
         return Response.ok(bankAccountService.findAll()).build();
@@ -52,16 +52,21 @@ public class AccountResource {
         if (ba == null) {
             return Response.serverError().build();
         }
-        return Response.ok(ba, MediaType.APPLICATION_JSON_TYPE).build();
+        return Response.created(URI.create("/accounts/" + ba.getId())).build();
     }
 
     @PUT
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateBankAccount(BankAccount bankAccount) {
-        BankAccount ba = bankAccountService.update(bankAccount);
-        if (ba == null) {
-            return Response.serverError().build();
+    public void updateBankAccount(@PathParam("id") Long id, BankAccount updateBankAccount) {
+        BankAccount bankAccount = bankAccountService.findById(id);
+        if (bankAccount == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return Response.ok(bankAccount, MediaType.APPLICATION_JSON_TYPE).build();
+        bankAccount.setOwner(updateBankAccount.getOwner());
+        bankAccount.setBalance(updateBankAccount.getBalance());
+        bankAccount.setAccNumber(updateBankAccount.getAccNumber());
+
+        bankAccountService.update(bankAccount);
     }
 }

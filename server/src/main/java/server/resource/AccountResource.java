@@ -69,4 +69,15 @@ public class AccountResource {
 
         bankAccountService.update(bankAccount);
     }
+
+    @DELETE
+    @Path("{id}")
+    public Response deleteBankAccount(@PathParam("id") Long id) {
+        BankAccount bankAccount = bankAccountService.findById(id);
+        if (bankAccount == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        bankAccountService.delete(bankAccount);
+        return Response.noContent().build();
+    }
 }

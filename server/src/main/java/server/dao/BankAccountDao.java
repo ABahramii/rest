@@ -40,4 +40,9 @@ public class BankAccountDao {
         em.merge(bankAccount);
         return bankAccount;
     }
+
+    public void delete(BankAccount bankAccount) {
+        bankAccount = em.merge(bankAccount);
+        em.remove(bankAccount);
+    }
 }

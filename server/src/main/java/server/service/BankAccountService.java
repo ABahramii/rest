@@ -43,4 +43,8 @@ public class BankAccountService {
         }
     }
 
+    public void delete(BankAccount bankAccount) {
+        bankAccountDao.delete(bankAccount);
+    }
+
 }

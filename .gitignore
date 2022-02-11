@@ -1,3 +1,4 @@
+.idea
 client/target
 client/client.iml
 server/target

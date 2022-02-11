@@ -3,7 +3,7 @@ package server.resource;
 import server.entity.BankAccount;
 import server.service.BankAccountService;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 
 @Path("/accounts")
-@RequestScoped
+@ApplicationScoped
 public class AccountResource {
 
     @Inject
@@ -23,7 +23,7 @@ public class AccountResource {
     public Response findAccountById(@PathParam("id") Long id) {
         BankAccount bankAccount = bankAccountService.findById(id);
         if (bankAccount == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new NotFoundException();
         }
         return Response.ok(bankAccount, MediaType.APPLICATION_JSON_TYPE).build();
     }
@@ -61,7 +61,7 @@ public class AccountResource {
     public void updateBankAccount(@PathParam("id") Long id, BankAccount updateBankAccount) {
         BankAccount bankAccount = bankAccountService.findById(id);
         if (bankAccount == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new NotFoundException();
         }
         bankAccount.setOwner(updateBankAccount.getOwner());
         bankAccount.setBalance(updateBankAccount.getBalance());
@@ -75,7 +75,7 @@ public class AccountResource {
     public Response deleteBankAccount(@PathParam("id") Long id) {
         BankAccount bankAccount = bankAccountService.findById(id);
         if (bankAccount == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new NotFoundException();
         }
         bankAccountService.delete(bankAccount);
         return Response.noContent().build();

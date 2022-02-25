@@ -1,6 +1,7 @@
 package server.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @NamedQueries({
         @NamedQuery(
@@ -10,6 +11,10 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "findAccountByAccNumber",
                 query = "select bankAccount from BankAccount bankAccount where bankAccount.accNumber=:accNumber"
+        ),
+        @NamedQuery(
+                name = "countByOwnerAndAccNumber",
+                query = "select count(ba) from  BankAccount ba where ba.owner=:owner and ba.accNumber=:accNumber"
         )
 })
 
@@ -56,4 +61,16 @@ public class BankAccount {
         this.accNumber = accNumber;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankAccount that = (BankAccount) o;
+        return Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(balance, that.balance) && Objects.equals(accNumber, that.accNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, owner, balance, accNumber);
+    }
 }

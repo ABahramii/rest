@@ -1,6 +1,8 @@
 package server.resource;
 
 import server.entity.BankAccount;
+import server.exception.DuplicateRecordException;
+import server.exception.SaveRecordException;
 import server.service.BankAccountService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -47,18 +49,16 @@ public class AccountResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createBankAccount(BankAccount bankAccount) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createBankAccount(BankAccount bankAccount) throws SaveRecordException, DuplicateRecordException {
         BankAccount ba = bankAccountService.create(bankAccount);
-        if (ba == null) {
-            return Response.serverError().build();
-        }
         return Response.created(URI.create("/accounts/" + ba.getId())).build();
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBankAccount(@PathParam("id") Long id, BankAccount updateBankAccount) {
+    public void updateBankAccount(@PathParam("id") Long id, BankAccount updateBankAccount) throws DuplicateRecordException {
         BankAccount bankAccount = bankAccountService.findById(id);
         if (bankAccount == null) {
             throw new NotFoundException();

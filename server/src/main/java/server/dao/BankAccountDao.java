@@ -1,6 +1,7 @@
 package server.dao;
 
 import server.entity.BankAccount;
+import server.exception.SaveRecordException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,18 +32,28 @@ public class BankAccountDao {
         return (BankAccount) query.getSingleResult();
     }
 
-    public BankAccount create(BankAccount bankAccount) {
+    public BankAccount create(BankAccount bankAccount) throws SaveRecordException {
         em.persist(bankAccount);
         return bankAccount;
     }
 
-    public BankAccount update(BankAccount bankAccount) {
+    public void update(BankAccount bankAccount) {
         em.merge(bankAccount);
-        return bankAccount;
     }
 
     public void delete(BankAccount bankAccount) {
         bankAccount = em.merge(bankAccount);
         em.remove(bankAccount);
+    }
+
+    public long countByOwnerAndAccNumber(BankAccount bankAccount) {
+        try {
+            Query query = em.createNamedQuery("countByOwnerAndAccNumber");
+            query.setParameter("owner", bankAccount.getOwner());
+            query.setParameter("accNumber", bankAccount.getAccNumber());
+            return (long) query.getSingleResult();
+        } catch (Exception e) {
+            return 1L;
+        }
     }
 }

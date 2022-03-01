@@ -2,6 +2,8 @@ package server.service;
 
 import server.dao.BankAccountDao;
 import server.entity.BankAccount;
+import server.exception.DuplicateRecordException;
+import server.exception.SaveRecordException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -29,19 +31,27 @@ public class BankAccountService {
         }
     }
 
-    public BankAccount create(BankAccount bankAccount) {
-        try {
-            return bankAccountDao.create(bankAccount);
-        } catch (Exception e) {
-            return null;
+    private boolean canSave(BankAccount bankAccount) throws DuplicateRecordException {
+        if (bankAccountDao.countByOwnerAndAccNumber(bankAccount) == 0L) {
+            return true;
         }
+        throw new DuplicateRecordException();
     }
 
-    public BankAccount update(BankAccount bankAccount) {
-        try {
-            return bankAccountDao.update(bankAccount);
-        } catch (Exception e) {
-            return null;
+    public BankAccount create(BankAccount bankAccount) throws SaveRecordException, DuplicateRecordException {
+        if (canSave(bankAccount)) {
+            try {
+                return bankAccountDao.create(bankAccount);
+            } catch (Exception e) {
+                throw new SaveRecordException();
+            }
+        }
+        return null;
+    }
+
+    public void update(BankAccount bankAccount) throws DuplicateRecordException {
+        if (canSave(bankAccount)) {
+            bankAccountDao.update(bankAccount);
         }
     }
 

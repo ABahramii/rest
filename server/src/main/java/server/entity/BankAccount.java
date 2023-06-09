@@ -1,6 +1,6 @@
 package server.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @NamedQueries({

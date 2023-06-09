@@ -1,15 +1,15 @@
 package server.resource;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import server.entity.BankAccount;
 import server.exception.DuplicateRecordException;
 import server.exception.SaveRecordException;
 import server.service.BankAccountService;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.net.URI;
 
 @Path("/accounts")

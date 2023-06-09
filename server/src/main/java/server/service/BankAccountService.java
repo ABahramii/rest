@@ -1,18 +1,18 @@
 package server.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import server.dao.BankAccountDao;
 import server.entity.BankAccount;
 import server.exception.DuplicateRecordException;
 import server.exception.SaveRecordException;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import java.util.List;
 
-@Stateless
+@ApplicationScoped
 public class BankAccountService {
 
-    @EJB
+    @Inject
     private BankAccountDao bankAccountDao;
 
     public BankAccount findById(Long id) {

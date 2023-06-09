@@ -1,15 +1,15 @@
 package server.dao;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import server.entity.BankAccount;
 import server.exception.SaveRecordException;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.List;
 
-@Stateless
+@ApplicationScoped
 public class BankAccountDao {
 
     @PersistenceContext(name = "my")
